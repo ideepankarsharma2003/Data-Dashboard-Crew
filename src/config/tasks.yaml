@@ -1,6 +1,6 @@
 analyze_data_task:
   description: >
-    Given a natural language query and a CSV file path, load the data,
+    Given a natural language query and one or more CSV file paths, load the data,
     perform the necessary analysis using Python, and return ONLY valid JSON.
 
     The JSON must include:
@@ -11,7 +11,7 @@ analyze_data_task:
     Natural language query:
     {query}
 
-    CSV path:
+    CSV paths:
     {csv_path}
   expected_output: >
     A valid JSON object containing insights, tables, and chart specifications.
@@ -22,6 +22,19 @@ format_dashboard_task:
     HTML dashboard with embedded JavaScript charts (Chart.js).
 
     The final output MUST be a complete HTML document.
-    ## NOTE: the dashboard should be visually appealing and well-organized. the charts should be interactive and easy to understand. 
+    ## NOTE: the dashboard should be visually appealing and well-organized. the charts should be interactive and easy to understand.
+    
+    CRITICAL IMPLEMENTATION DETAILS:
+    1. CSS: 
+       - Give `.chart-container` a relative position.
+       - WRAP every `<canvas>` element inside a `<div class="chart-wrapper">` with specific CSS: `position: relative; height: 400px; width: 100%;`.
+       - For `canvas`, use `width: 100% !important;` but DO NOT set `height: auto !important` as it breaks Chart.js aspect ratio.
+    2. Mobile View Toggle:
+       - Add a "Switch to Mobile View" button in the `<header>`.
+       - Implement JavaScript to toggle a `mobile-view` class on the `body`.
+       - When `mobile-view` is active, restrict `main` max-width to 375px and center it.
+    3. Charts:
+       - Use `maintainAspectRatio: false` in Chart.js options.
+       - Ensure charts fit within the `400px` height of their wrapper. 
   expected_output: >
     A complete static HTML dashboard saved to dashboard.html
