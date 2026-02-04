@@ -1,0 +1,27 @@
+analyze_data_task:
+  description: >
+    Given a natural language query and a CSV file path, load the data,
+    perform the necessary analysis using Python, and return ONLY valid JSON.
+
+    The JSON must include:
+    - summary_insights
+    - tables (columns + rows)
+    - chart_specs (type, labels, datasets)
+
+    Natural language query:
+    {query}
+
+    CSV path:
+    {csv_path}
+  expected_output: >
+    A valid JSON object containing insights, tables, and chart specifications.
+
+format_dashboard_task:
+  description: >
+    Using the structured JSON output from the data analyst, generate a static
+    HTML dashboard with embedded JavaScript charts (Chart.js).
+
+    The final output MUST be a complete HTML document.
+    ## NOTE: the dashboard should be visually appealing and well-organized. the charts should be interactive and easy to understand. 
+  expected_output: >
+    A complete static HTML dashboard saved to dashboard.html

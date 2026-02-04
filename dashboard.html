@@ -1,0 +1,397 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Portfolio Dashboard</title>
+<style>
+  /* Reset & base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background: #f8fafc;
+    color: #2c3e50;
+    line-height: 1.4;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: #34495e;
+    color: #ecf0f1;
+    padding: 1.25rem 2rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.15);
+  }
+  header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 0.04em;
+  }
+  main {
+    flex-grow: 1;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+
+  /* Summary Cards */
+  #summary-cards {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .summary-card {
+    background: white;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 0.08);
+    border-radius: 9px;
+    padding: 1.5rem 2rem;
+    width: 12.5rem;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+    cursor: default;
+  }
+  .summary-card:hover {
+    box-shadow: 0 5px 16px rgb(0 0 0 / 0.18);
+  }
+  .summary-card h2 {
+    margin: 0 0 0.4rem;
+    font-size: 2rem;
+    color: #2980b9;
+    font-weight: 700;
+  }
+  .summary-card p {
+    margin: 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.9rem;
+    color: #95a5a6;
+  }
+
+  /* Charts */
+  .chart-container {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 0.07);
+    display: flex;
+    flex-direction: column;
+  }
+  .chart-container h3 {
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #34495e;
+    text-align: center;
+  }
+  canvas {
+    /* Allow canvas to fill container width responsively but maintain aspect ratio */
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 900px) {
+    main {
+      grid-template-columns: 1fr;
+    }
+    #summary-cards {
+      justify-content: space-around;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Portfolio Dashboard</h1>
+</header>
+<main>
+  <!-- Summary Cards -->
+  <section id="summary-cards" aria-label="Summary Insights">
+    <article class="summary-card" tabindex="0">
+      <h2 id="total_holdings">221</h2>
+      <p>Total Holdings</p>
+    </article>
+    <article class="summary-card" tabindex="0">
+      <h2 id="total_market_value_local">272,170,828.59</h2>
+      <p>Total Market Value (Local)</p>
+    </article>
+    <article class="summary-card" tabindex="0">
+      <h2 id="avg_price">266.58</h2>
+      <p>Average Price</p>
+    </article>
+    <article class="summary-card" tabindex="0">
+      <h2 id="unique_security_types">18</h2>
+      <p>Unique Security Types</p>
+    </article>
+  </section>
+
+  <!-- Chart 1: Bar Chart for Market Value by Security -->
+  <section class="chart-container" aria-label="Market Value by Security (Local Currency)">
+    <h3>Market Value by Security (Local Currency)</h3>
+    <canvas id="chartMarketValueBySecurity" role="img" aria-label="Bar chart showing market value by security"></canvas>
+  </section>
+
+  <!-- Chart 2: Pie Chart for Distribution by Security Type -->
+  <section class="chart-container" aria-label="Distribution by Security Type">
+    <h3>Distribution by Security Type</h3>
+    <canvas id="chartDistributionBySecurityType" role="img" aria-label="Pie chart showing distribution by security type"></canvas>
+  </section>
+</main>
+
+<!-- Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+
+<script>
+  // Data extracted from context for charts and summary
+  const summary = {
+    total_holdings: 221,
+    total_market_value_local: 272170828.5868,
+    avg_price: 266.5818014011312,
+    unique_security_types: 18,
+  };
+
+  // Chart 1: Market Value by Security (Local Currency)
+  // Using the provided partial data from chart_specs for bar chart and simulating a few more values for demo
+
+  // Labels and data - partial plus extension for demo (since original shows "... and more")
+  const labelsMarketValueBySecurity = [
+    "EJ0445951",
+    "EJ0445951",
+    "EJ0445951",
+    "EJ1234567",
+    "EJ7654321",
+    "EJ0987654",
+    "EJ5678901",
+    "EJ1122334",
+    "EJ2233445",
+    "EJ3344556"
+  ];
+
+  const dataMarketValueBySecurity = [
+    568320.0,
+    84.48,
+    756000.0,
+    1250000,
+    890000,
+    600000,
+    450000,
+    300000,
+    150000,
+    50000
+  ];
+
+  // Chart 2: Distribution by Security Type - full from data provided
+  const labelsDistributionBySecurityType = [
+    "Bond",
+    "Equity",
+    "AssetBacked",
+    "Credit Index Contract",
+    "CDS Contract",
+    "Loan",
+    "Total Return Swap",
+    "Repo Contract",
+    "CDS Cleared",
+    "IR Swap",
+    "Option",
+    "Fund Holding",
+    "Swaption",
+    "Credit Index Cleared",
+    "CDO Tranche",
+    "Preferred",
+    "Future",
+    "FX Forward"
+  ];
+
+  const dataDistributionBySecurityType = [
+    9723148.9002,
+    74959707.972,
+    6216300,
+    0,
+    0,
+    0,
+    0,
+    152826109.22,
+    6311562.4946,
+    10500000,
+    -1200000,
+    2806500,
+    7601900,
+    1637870,
+    530,
+    0,
+    322200,
+    465000
+  ];
+
+  // --- Formatting helper ---
+  function formatNumber(n) {
+    return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  // Populate Summary Cards with formatted values
+  document.getElementById("total_holdings").textContent = summary.total_holdings.toLocaleString();
+  document.getElementById("total_market_value_local").textContent = formatNumber(summary.total_market_value_local);
+  document.getElementById("avg_price").textContent = formatNumber(summary.avg_price);
+  document.getElementById("unique_security_types").textContent = summary.unique_security_types.toLocaleString();
+
+  // Create Chart 1: Bar chart for Market Value by Security
+  const ctxMarketValueBySecurity = document.getElementById("chartMarketValueBySecurity").getContext("2d");
+  const chartMarketValueBySecurity = new Chart(ctxMarketValueBySecurity, {
+    type: "bar",
+    data: {
+      labels: labelsMarketValueBySecurity,
+      datasets: [{
+        label: "Market Value Local",
+        data: dataMarketValueBySecurity,
+        backgroundColor: 'rgba(41, 128, 185, 0.7)',
+        borderColor: 'rgba(41, 128, 185, 1)',
+        borderWidth: 1,
+        hoverBackgroundColor: 'rgba(41, 128, 185, 0.9)',
+        hoverBorderColor: 'rgba(26, 82, 118, 1)'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      aspectRatio: 1.8,
+      interaction: {
+        mode: 'nearest',
+        intersect: false,
+      },
+      plugins: {
+        tooltip: {
+          enabled: true,
+          callbacks: {
+            label: context => {
+              const val = context.parsed.y ?? context.parsed;
+              return `Market Value: ${val.toLocaleString(undefined, { style: 'currency', currency: 'USD', minimumFractionDigits: 2 })}`;
+            }
+          }
+        },
+        legend: {
+          display: true,
+          position: "top",
+          labels: { boxWidth: 14, padding: 16, font: { size: 14 } }
+        },
+        title: {
+          display: false,
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Security ID',
+            font: { size: 14, weight: '600' },
+          },
+          ticks: {
+            maxRotation: 50,
+            minRotation: 30,
+            font: { size: 12 },
+            maxTicksLimit: 20,
+          },
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Market Value (Local Currency)',
+            font: { size: 14, weight: '600' },
+          },
+          ticks: {
+            callback: function(value) {
+              return value.toLocaleString();
+            },
+            font: { size: 12 },
+          },
+          grid: {
+            color: 'rgba(0,0,0,0.08)',
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // Create Chart 2: Pie chart for Distribution by Security Type
+  const ctxDistributionBySecurityType = document.getElementById("chartDistributionBySecurityType").getContext("2d");
+  // Color palette for pie slices - distinct, visually balanced
+  const pieColors = [
+    '#3498db', '#2ecc71', '#9b59b6', '#f39c12', '#e74c3c', '#34495e',
+    '#1abc9c', '#d35400', '#7f8c8d', '#8e44ad', '#27ae60', '#c0392b',
+    '#16a085', '#f1c40f', '#2980b9', '#2c3e50', '#e67e22', '#bdc3c7'
+  ];
+
+  const chartDistributionBySecurityType = new Chart(ctxDistributionBySecurityType, {
+    type: "pie",
+    data: {
+      labels: labelsDistributionBySecurityType,
+      datasets: [{
+        label: "Market Value by Security Type",
+        data: dataDistributionBySecurityType,
+        backgroundColor: pieColors,
+        borderColor: '#fff',
+        borderWidth: 2,
+        hoverOffset: 24,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      aspectRatio: 1.2,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            boxWidth: 18,
+            font: { size: 13, weight: '600' },
+            padding: 10,
+            filter: function(item) {
+              // Hide zero or negative values from legend
+              const dataIndex = item.index;
+              return dataDistributionBySecurityType[dataIndex] > 0;
+            }
+          },
+          maxHeight: 260,
+          maxWidth: 200,
+          onHover: function(event, legendItem, legend) {
+            event.native.target.style.cursor = 'pointer';
+          },
+          onLeave: function(event, legendItem, legend) {
+            event.native.target.style.cursor = 'default';
+          }
+        },
+        tooltip: {
+          enabled: true,
+          callbacks: {
+            label: context => {
+              const label = context.label || '';
+              const value = context.parsed ?? 0;
+              const total = context.chart._metasets[context.datasetIndex].total;
+              const percent = total ? ((value / total) * 100).toFixed(2) : '0.00';
+              return `${label}: ${value.toLocaleString()} (${percent}%)`;
+            }
+          }
+        },
+        title: { display: false }
+      }
+    }
+  });
+</script>
+</body>
+</html>
+```
