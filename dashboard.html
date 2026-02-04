@@ -1,453 +1,616 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Portfolio Dashboard</title>
+  <meta charset="UTF-8">
+  <title>Garfield Portfolio Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* Reset & base */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #0b1220;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --brand: #60a5fa;
+      --accent: #34d399;
+      --danger: #f87171;
+      --warning: #fbbf24;
+      --card: #0b1220;
+      --border: #1f2937;
     }
-
+    * { box-sizing: border-box; }
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      background: #f8fafc;
-      color: #2c3e50;
-      line-height: 1.4;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 10% -10%, #1e293b 0%, #0b1220 60%), linear-gradient(180deg, #0b1220, #0b1220);
     }
-
     header {
-      background: #34495e;
-      color: #ecf0f1;
-      padding: 1.25rem 2rem;
-      text-align: center;
-      box-shadow: 0 2px 5px rgb(0 0 0 / 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(17,24,39,0.95), rgba(17,24,39,0.92));
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
     }
-
-    header h1 {
-      margin: 0;
-      font-weight: 700;
-      font-size: 1.8rem;
-      letter-spacing: 0.04em;
-    }
-
-    main {
-      flex-grow: 1;
+    .header-inner {
       max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.5rem;
-    }
-
-    /* Summary Cards */
-    #summary-cards {
-      grid-column: 1 / -1;
+      margin: 0 auto;
+      padding: 16px 20px;
       display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
-
-    .summary-card {
-      background: white;
-      box-shadow: 0 3px 8px rgb(0 0 0 / 0.08);
-      border-radius: 9px;
-      padding: 1.5rem 2rem;
-      width: 12.5rem;
-      text-align: center;
-      transition: box-shadow 0.3s ease;
-      cursor: default;
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-
-    .summary-card:hover {
-      box-shadow: 0 5px 16px rgb(0 0 0 / 0.18);
-    }
-
-    .summary-card h2 {
-      margin: 0 0 0.4rem;
-      font-size: 2rem;
-      color: #2980b9;
+    .title-badge {
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #0b1220;
+      background: linear-gradient(90deg, #60a5fa, #34d399);
       font-weight: 700;
+      letter-spacing: .02em;
     }
-
-    .summary-card p {
+    .title h1 {
       margin: 0;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-size: 0.9rem;
-      color: #95a5a6;
-    }
-
-    /* Charts */
-    .chart-container {
-      background: white;
-      padding: 1.5rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 3px 8px rgb(0 0 0 / 0.07);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .chart-container h3 {
-      margin: 0 0 1rem 0;
+      font-size: 20px;
       font-weight: 700;
-      font-size: 1.3rem;
-      color: #34495e;
-      text-align: center;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #0b1220, #0b1220);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: border-color .2s, transform .05s;
+    }
+    .btn:hover { border-color: #334155; }
+    .btn:active { transform: translateY(1px); }
+    main {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px 40px;
+    }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: linear-gradient(180deg, rgba(17,24,39,0.7), rgba(11,18,32,0.7));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .kpi-title {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .kpi-sub {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .sections {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .panel {
+      background: linear-gradient(180deg, rgba(17,24,39,0.7), rgba(11,18,32,0.7));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .panel h2 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+    }
+    .panel .desc {
+      color: var(--muted);
+      font-size: 13px;
+      margin: -6px 0 10px 0;
     }
 
-    canvas {
-      /* Fix: Remove height auto to prevent layout issues with Chart.js */
-      width: 100% !important;
-    }
-
-    /* Container for charts needs explicit height for reponsive charts */
+    /* Chart wrappers and container per requirements */
+    .chart-container { position: relative; }
     .chart-wrapper {
       position: relative;
       height: 400px;
       width: 100%;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(2,6,23,0.35), rgba(2,6,23,0.2));
+      border: 1px dashed rgba(148,163,184,0.15);
+      overflow: hidden;
+    }
+    canvas {
+      width: 100% !important;
+      display: block;
+    }
+    .no-data-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, rgba(2,6,23,0.12), rgba(2,6,23,0.12));
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      padding: 8px;
+      pointer-events: none;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 900px) {
-      main {
-        grid-template-columns: 1fr;
-      }
-
-      #summary-cards {
-        justify-content: space-around;
-      }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
     }
 
-    /* Mobile View Simulation */
+    footer {
+      max-width: 1200px;
+      margin: 10px auto 30px;
+      padding: 0 20px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 980px) {
+      .kpis { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .sections { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    /* Mobile view toggle mode */
     body.mobile-view main {
       max-width: 375px;
-      margin: 2rem auto;
-      grid-template-columns: 1fr;
-      border: 10px solid #333;
-      border-radius: 20px;
-      padding: 1rem;
-      background: #fff;
-    }
-
-    body.mobile-view .chart-container {
-      padding: 1rem;
+      margin: 20px auto;
     }
   </style>
 </head>
-
 <body>
   <header>
-    <h1>Portfolio Dashboard</h1>
-    <button id="viewToggle"
-      style="margin-left: 20px; padding: 0.5rem 1rem; cursor: pointer; background: #2980b9; color: white; border: none; border-radius: 4px; font-weight: 600;">Switch
-      to Mobile View</button>
+    <div class="header-inner">
+      <div class="title">
+        <span class="title-badge">Portfolio</span>
+        <h1>Garfield Dashboard</h1>
+      </div>
+      <div class="header-actions">
+        <button id="mobileToggle" class="btn" aria-pressed="false">Switch to Mobile View</button>
+      </div>
+    </div>
   </header>
-  <main>
-    <!-- Summary Cards -->
-    <section id="summary-cards" aria-label="Summary Insights">
-      <article class="summary-card" tabindex="0">
-        <h2 id="total_holdings">221</h2>
-        <p>Total Holdings</p>
-      </article>
-      <article class="summary-card" tabindex="0">
-        <h2 id="total_market_value_local">272,170,828.59</h2>
-        <p>Total Market Value (Local)</p>
-      </article>
-      <article class="summary-card" tabindex="0">
-        <h2 id="avg_price">266.58</h2>
-        <p>Average Price</p>
-      </article>
-      <article class="summary-card" tabindex="0">
-        <h2 id="unique_security_types">18</h2>
-        <p>Unique Security Types</p>
-      </article>
-    </section>
 
-    <!-- Chart 1: Bar Chart for Market Value by Security -->
-    <section class="chart-container" aria-label="Market Value by Security (Local Currency)">
-      <h3>Market Value by Security (Local Currency)</h3>
-      <div class="chart-wrapper">
-        <canvas id="chartMarketValueBySecurity" role="img"
-          aria-label="Bar chart showing market value by security"></canvas>
+  <main>
+    <section class="kpis" id="kpis">
+      <div class="kpi-card">
+        <div class="kpi-title">As of Date</div>
+        <div class="kpi-value" id="asOfDate">—</div>
+        <div class="kpi-sub">Portfolio: Garfield</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Holdings</div>
+        <div class="kpi-value" id="holdingsCount">—</div>
+        <div class="kpi-sub">Securities in scope</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">MV Base (Mean)</div>
+        <div class="kpi-value" id="mvMean">—</div>
+        <div class="kpi-sub">Std. Dev: <span id="mvStd">—</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Direction Mix</div>
+        <div class="kpi-value" id="dirMix">—</div>
+        <div class="kpi-sub">Long vs. Short</div>
       </div>
     </section>
 
-    <!-- Chart 2: Pie Chart for Distribution by Security Type -->
-    <section class="chart-container" aria-label="Distribution by Security Type">
-      <h3>Distribution by Security Type</h3>
+    <section class="sections">
+      <div class="panel chart-container">
+        <h2>Market Value (Base) Distribution</h2>
+        <div class="desc">Distribution stats for MV_Base across holdings</div>
+        <div class="chart-wrapper">
+          <canvas id="mvBaseChart"></canvas>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Highlights</h2>
+        <div class="desc">Key insights from holdings summary</div>
+        <div class="two-col">
+          <div class="kpi-card" style="background:none;border:1px solid var(--border);">
+            <div class="kpi-title">Top Custodian</div>
+            <div class="kpi-value" id="topCustodian">—</div>
+            <div class="kpi-sub" id="topCustodianFreq">—</div>
+          </div>
+          <div class="kpi-card" style="background:none;border:1px solid var(--border);">
+            <div class="kpi-title">Security Types (Unique)</div>
+            <div class="kpi-value" id="secTypeUnique">—</div>
+            <div class="kpi-sub">Top: AssetBacked</div>
+          </div>
+        </div>
+        <div class="two-col" style="margin-top:12px;">
+          <div class="panel chart-container" style="padding:12px;">
+            <h2 style="font-size:14px;margin-bottom:8px;">Direction Breakdown</h2>
+            <div class="chart-wrapper">
+              <canvas id="directionChart"></canvas>
+            </div>
+          </div>
+          <div class="panel chart-container" style="padding:12px;">
+            <h2 style="font-size:14px;margin-bottom:8px;">Security Type Mix</h2>
+            <div class="chart-wrapper">
+              <canvas id="secTypeChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel chart-container">
+      <h2>Trades Timeline</h2>
+      <div class="desc">No trades have been reported for Garfield in the provided dataset</div>
       <div class="chart-wrapper">
-        <canvas id="chartDistributionBySecurityType" role="img"
-          aria-label="Pie chart showing distribution by security type"></canvas>
+        <canvas id="tradesChart"></canvas>
       </div>
     </section>
   </main>
 
-  <!-- Chart.js library -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+  <footer>
+    Data source: Analyst JSON extract. Charts are interactive; hover to explore values. Use the Mobile View toggle for compact layout.
+  </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script>
-    // Data extracted from context for charts and summary
-    const summary = {
-      total_holdings: 221,
-      total_market_value_local: 272170828.5868,
-      avg_price: 266.5818014011312,
-      unique_security_types: 18,
+    // Embedded structured JSON context
+    const context = {
+      "summary_insights": {
+        "holdings_summary": {
+          "AsOfDate": {"count": 221, "unique": 1, "top": "01/08/23", "freq": 221},
+          "OpenDate": {"count": 221, "unique": 51, "top": "04/03/20", "freq": 114},
+          "CloseDate": {"count": 1, "unique": 1, "top": "18/06/21", "freq": 1},
+          "ShortName": {"count": 221, "unique": 1, "top": "Garfield", "freq": 221},
+          "PortfolioName": {"count": 221, "unique": 1, "top": "Garfield", "freq": 221},
+          "StrategyRefShortName": {"count": 221, "unique": 60, "top": " Default", "freq": 109},
+          "Strategy1RefShortName": {"count": 221, "unique": 4, "top": "Asset", "freq": 174},
+          "Strategy2RefShortName": {"count": 221, "unique": 1, "top": "DefaultS2", "freq": 221},
+          "CustodianName": {"count": 221, "unique": 6, "top": "Well Prime", "freq": 89},
+          "DirectionName": {"count": 221, "unique": 2, "top": "Long", "freq": 189},
+          "SecurityId": {"count": 221, "mean": 287663.75, "std": 4094.36, "min": 270992, "25%": 288790, "50%": 288812, "75%": 288904, "max": 290112},
+          "SecurityTypeName": {"count": 221, "unique": 18, "top": "AssetBacked", "freq": 55},
+          "SecName": {"count": 221, "unique": 150, "top": "004421CG6", "freq": 39},
+          "StartQty": {"count": 221, "mean": 1400298.69, "std": 2113653.69, "min": -4581627, "25%": 43000, "50%": 1250000, "75%": 2000000, "max": 11375000},
+          "Qty": {"count": 221, "mean": 1400298.69, "std": 2113653.69, "min": -4581627, "25%": 43000, "50%": 1250000, "75%": 2000000, "max": 11375000},
+          "StartPrice": {"count": 221, "mean": 255.96, "std": 2944.87, "min": 0, "25%": 1.26, "50%": 78, "75%": 96, "max": 43831.81},
+          "Price": {"count": 221, "mean": 266.58, "std": 2944.74, "min": -83.98, "25%": 50, "50%": 81, "75%": 97, "max": 43840.93},
+          "StartFXRate": {"count": 221, "mean": 2.56, "std": 13.14, "min": 0.75, "25%": 1, "50%": 1, "75%": 1, "max": 114.34},
+          "FXRate": {"count": 221, "mean": 2.56, "std": 13.14, "min": 0.75, "25%": 1, "50%": 1, "75%": 1, "max": 114.34},
+          "MV_Local": {"count": 220, "mean": 1237140.13, "std": 8922659.29, "min": -2026700, "25%": 0, "50%": 0, "75%": 1138200, "max": 131522790},
+          "MV_Base": {"count": 220, "mean": 657637.23, "std": 1336951.44, "min": -2026700, "25%": 0, "50%": 0, "75%": 1149409.51, "max": 9690625},
+          "PL_DTD": {"count": 221, "mean": -64.12, "std": 2589.51, "min": -33768.47, "25%": 0, "50%": 0, "75%": 0, "max": 17600},
+          "PL_QTD": {"count": 221, "mean": -32523.47, "std": 222427.75, "min": -2500653.46, "25%": 0, "50%": 0, "75%": 1.15, "max": 37240},
+          "PL_MTD": {"count": 221, "mean": -64.12, "std": 2589.51, "min": -33768.47, "25%": 0, "50%": 0, "75%": 0, "max": 17600},
+          "PL_YTD": {"count": 221, "mean": -762674.34, "std": 6002037.83, "min": -78750000, "25%": -10333.33, "50%": 0, "75%": 3.13, "max": 178500}
+        },
+        "trades_summary": "No trades data for portfolio Garfield."
+      },
+      "tables": {
+        "holdings": {
+          "columns": ["AsOfDate", "OpenDate", "CloseDate", "ShortName", "PortfolioName", "StrategyRefShortName", "Strategy1RefShortName", "Strategy2RefShortName", "CustodianName", "DirectionName", "SecurityId", "SecurityTypeName", "SecName", "StartQty", "Qty", "StartPrice", "Price", "StartFXRate", "FXRate", "MV_Local", "MV_Base", "PL_DTD", "PL_QTD", "PL_MTD", "PL_YTD"],
+          "rows": "[Holdings data rows filtered for Garfield]"
+        },
+        "trades": {
+          "columns": ["id", "RevisionId", "AllocationId", "TradeTypeName", "SecurityId", "SecurityType", "Name", "Ticker", "CUSIP", "ISIN", "TradeDate", "SettleDate", "Quantity", "Price", "TradeFXRate", "Principal", "Interest", "TotalCash", "AllocationQTY", "AllocationPrincipal", "AllocationInterest", "AllocationFees", "AllocationCash", "PortfolioName", "CustodianName", "StrategyName", "Strategy1Name", "Strategy2Name", "Counterparty", "AllocationRule", "IsCustomAllocation"],
+          "rows": []
+        }
+      },
+      "chart_specs": {
+        "holdings_chart": {
+          "type": "bar",
+          "labels": ["Garfield", "Garfield", "Garfield", "..."],
+          "datasets": [
+            {
+              "label": "Market Value Base",
+              "data": "[MV_Base values from Garfield holdings]",
+              "backgroundColor": "rgba(54, 162, 235, 0.6)"
+            }
+          ]
+        },
+        "trades_chart": {
+          "type": "line",
+          "labels": [],
+          "datasets": [
+            {
+              "label": "Quantity",
+              "data": [],
+              "borderColor": "rgba(255, 99, 132, 0.6)",
+              "fill": false
+            }
+          ]
+        }
+      }
     };
 
-    // Chart 1: Market Value by Security (Local Currency)
-    // Using the provided partial data from chart_specs for bar chart and simulating a few more values for demo
+    // Helpers
+    const fmt = (n) => {
+      if (n === null || n === undefined || isNaN(n)) return "—";
+      const abs = Math.abs(n);
+      if (abs >= 1_000_000_000) return (n / 1_000_000_000).toFixed(2) + "B";
+      if (abs >= 1_000_000) return (n / 1_000_000).toFixed(2) + "M";
+      if (abs >= 1_000) return (n / 1_000).toFixed(2) + "K";
+      return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    };
 
-    // Labels and data - partial plus extension for demo (since original shows "... and more")
-    const labelsMarketValueBySecurity = [
-      "EJ0445951",
-      "EJ0445951",
-      "EJ0445951",
-      "EJ1234567",
-      "EJ7654321",
-      "EJ0987654",
-      "EJ5678901",
-      "EJ1122334",
-      "EJ2233445",
-      "EJ3344556"
-    ];
-
-    const dataMarketValueBySecurity = [
-      568320.0,
-      84.48,
-      756000.0,
-      1250000,
-      890000,
-      600000,
-      450000,
-      300000,
-      150000,
-      50000
-    ];
-
-    // Chart 2: Distribution by Security Type - full from data provided
-    const labelsDistributionBySecurityType = [
-      "Bond",
-      "Equity",
-      "AssetBacked",
-      "Credit Index Contract",
-      "CDS Contract",
-      "Loan",
-      "Total Return Swap",
-      "Repo Contract",
-      "CDS Cleared",
-      "IR Swap",
-      "Option",
-      "Fund Holding",
-      "Swaption",
-      "Credit Index Cleared",
-      "CDO Tranche",
-      "Preferred",
-      "Future",
-      "FX Forward"
-    ];
-
-    const dataDistributionBySecurityType = [
-      9723148.9002,
-      74959707.972,
-      6216300,
-      0,
-      0,
-      0,
-      0,
-      152826109.22,
-      6311562.4946,
-      10500000,
-      -1200000,
-      2806500,
-      7601900,
-      1637870,
-      530,
-      0,
-      322200,
-      465000
-    ];
-
-    // --- Formatting helper ---
-    function formatNumber(n) {
-      return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function addNoDataOverlay(wrapperEl, message) {
+      const overlay = document.createElement('div');
+      overlay.className = 'no-data-overlay';
+      overlay.textContent = message || 'No data available';
+      wrapperEl.appendChild(overlay);
+      return overlay;
     }
 
-    // Populate Summary Cards with formatted values
-    document.getElementById("total_holdings").textContent = summary.total_holdings.toLocaleString();
-    document.getElementById("total_market_value_local").textContent = formatNumber(summary.total_market_value_local);
-    document.getElementById("avg_price").textContent = formatNumber(summary.avg_price);
-    document.getElementById("unique_security_types").textContent = summary.unique_security_types.toLocaleString();
+    // Mobile view toggle
+    const mobileToggleBtn = document.getElementById('mobileToggle');
+    mobileToggleBtn.addEventListener('click', () => {
+      const isMobile = document.body.classList.toggle('mobile-view');
+      mobileToggleBtn.setAttribute('aria-pressed', isMobile ? 'true' : 'false');
+      mobileToggleBtn.textContent = isMobile ? 'Switch to Desktop View' : 'Switch to Mobile View';
+    });
 
-    // Create Chart 1: Bar chart for Market Value by Security
-    const ctxMarketValueBySecurity = document.getElementById("chartMarketValueBySecurity").getContext("2d");
-    const chartMarketValueBySecurity = new Chart(ctxMarketValueBySecurity, {
-      type: "bar",
-      data: {
-        labels: labelsMarketValueBySecurity,
-        datasets: [{
-          label: "Market Value Local",
-          data: dataMarketValueBySecurity,
-          backgroundColor: 'rgba(41, 128, 185, 0.7)',
-          borderColor: 'rgba(41, 128, 185, 1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(41, 128, 185, 0.9)',
-          hoverBorderColor: 'rgba(26, 82, 118, 1)'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        aspectRatio: 1.8,
-        interaction: {
-          mode: 'nearest',
-          intersect: false,
+    // Populate KPI cards
+    (function populateKPIs() {
+      const hs = context.summary_insights.holdings_summary;
+      const asOf = hs?.AsOfDate?.top || "—";
+      const count = hs?.SecurityId?.count ?? hs?.AsOfDate?.count ?? null;
+      const mv = hs?.MV_Base || {};
+      const mvMean = mv.mean;
+      const mvStd = mv.std;
+      const topCustodian = hs?.CustodianName?.top;
+      const topCustodianFreq = hs?.CustodianName?.freq;
+      const dirTop = hs?.DirectionName?.top || "—";
+      const dirTopFreq = hs?.DirectionName?.freq || 0;
+      const dirCount = hs?.DirectionName?.count || 0;
+      const otherDir = Math.max(dirCount - dirTopFreq, 0);
+      const secTypeUnique = hs?.SecurityTypeName?.unique || 0;
+
+      document.getElementById('asOfDate').textContent = asOf;
+      document.getElementById('holdingsCount').textContent = count != null ? count.toLocaleString() : "—";
+      document.getElementById('mvMean').textContent = fmt(mvMean);
+      document.getElementById('mvStd').textContent = fmt(mvStd);
+      document.getElementById('dirMix').textContent = `${dirTopFreq.toLocaleString()} ${dirTop} / ${otherDir.toLocaleString()} Other`;
+      document.getElementById('topCustodian').textContent = topCustodian || "—";
+      document.getElementById('topCustodianFreq').textContent = topCustodianFreq ? `${topCustodianFreq} holdings` : "—";
+      document.getElementById('secTypeUnique').textContent = secTypeUnique.toString();
+    })();
+
+    // Chart.js defaults
+    Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#e5e7eb';
+    Chart.defaults.borderColor = 'rgba(148,163,184,0.25)';
+    Chart.defaults.font.family = 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+
+    // MV_Base Distribution Chart (Bar: Min, Q1, Median, Q3, Max, Mean)
+    (function mvBaseChartInit() {
+      const mv = context.summary_insights.holdings_summary.MV_Base || {};
+      const labels = ['Min', 'Q1', 'Median', 'Q3', 'Max', 'Mean'];
+      const data = [mv.min, mv['25%'], mv['50%'], mv['75%'], mv.max, mv.mean].map(v => (typeof v === 'number' ? v : 0));
+
+      const el = document.getElementById('mvBaseChart');
+      const wrapper = el.closest('.chart-wrapper');
+      const hasData = data.some(v => v !== 0);
+
+      if (!hasData) {
+        addNoDataOverlay(wrapper, 'MV_Base distribution not available');
+      }
+
+      const gradient = el.getContext('2d').createLinearGradient(0, 0, 0, 400);
+      gradient.addColorStop(0, 'rgba(96,165,250,0.9)');
+      gradient.addColorStop(1, 'rgba(96,165,250,0.2)');
+
+      new Chart(el, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'MV_Base (Base Currency)',
+            data,
+            backgroundColor: gradient,
+            borderColor: 'rgba(96,165,250,0.9)',
+            borderWidth: 1.5
+          }]
         },
-        plugins: {
-          tooltip: {
-            enabled: true,
-            callbacks: {
-              label: context => {
-                const val = context.parsed.y ?? context.parsed;
-                return `Market Value: ${val.toLocaleString(undefined, { style: 'currency', currency: 'USD', minimumFractionDigits: 2 })}`;
-              }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: { label: ctx => ` ${fmt(ctx.parsed.y)}` }
             }
           },
-          legend: {
-            display: true,
-            position: "top",
-            labels: { boxWidth: 14, padding: 16, font: { size: 14 } }
-          },
-          title: {
-            display: false,
-          }
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Security ID',
-              font: { size: 14, weight: '600' },
+          scales: {
+            x: {
+              grid: { display: false }
             },
-            ticks: {
-              maxRotation: 50,
-              minRotation: 30,
-              font: { size: 12 },
-              maxTicksLimit: 20,
-            },
-            grid: {
-              display: false,
-            },
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Market Value (Local Currency)',
-              font: { size: 14, weight: '600' },
-            },
-            ticks: {
-              callback: function (value) {
-                return value.toLocaleString();
-              },
-              font: { size: 12 },
-            },
-            grid: {
-              color: 'rgba(0,0,0,0.08)',
-            },
-            beginAtZero: true
+            y: {
+              ticks: {
+                callback: (v) => fmt(v)
+              }
+            }
           }
         }
-      }
-    });
+      });
+    })();
 
-    // Create Chart 2: Pie chart for Distribution by Security Type
-    const ctxDistributionBySecurityType = document.getElementById("chartDistributionBySecurityType").getContext("2d");
-    // Color palette for pie slices - distinct, visually balanced
-    const pieColors = [
-      '#3498db', '#2ecc71', '#9b59b6', '#f39c12', '#e74c3c', '#34495e',
-      '#1abc9c', '#d35400', '#7f8c8d', '#8e44ad', '#27ae60', '#c0392b',
-      '#16a085', '#f1c40f', '#2980b9', '#2c3e50', '#e67e22', '#bdc3c7'
-    ];
+    // Direction Breakdown (Doughnut)
+    (function directionChartInit() {
+      const hs = context.summary_insights.holdings_summary;
+      const top = hs?.DirectionName?.top || 'Long';
+      const topFreq = hs?.DirectionName?.freq || 0;
+      const total = hs?.DirectionName?.count || 0;
+      const other = Math.max(total - topFreq, 0);
+      const labels = [top, 'Other'];
+      const data = [topFreq, other];
 
-    const chartDistributionBySecurityType = new Chart(ctxDistributionBySecurityType, {
-      type: "pie",
-      data: {
-        labels: labelsDistributionBySecurityType,
-        datasets: [{
-          label: "Market Value by Security Type",
-          data: dataDistributionBySecurityType,
-          backgroundColor: pieColors,
-          borderColor: '#fff',
-          borderWidth: 2,
-          hoverOffset: 24,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        aspectRatio: 1.2,
-        plugins: {
-          legend: {
-            position: 'right',
-            labels: {
-              boxWidth: 18,
-              font: { size: 13, weight: '600' },
-              padding: 10,
-              filter: function (item) {
-                // Hide zero or negative values from legend
-                const dataIndex = item.index;
-                return dataDistributionBySecurityType[dataIndex] > 0;
-              }
-            },
-            maxHeight: 260,
-            maxWidth: 200,
-            onHover: function (event, legendItem, legend) {
-              event.native.target.style.cursor = 'pointer';
-            },
-            onLeave: function (event, legendItem, legend) {
-              event.native.target.style.cursor = 'default';
-            }
-          },
-          tooltip: {
-            enabled: true,
-            callbacks: {
-              label: context => {
-                const label = context.label || '';
-                const value = context.parsed ?? 0;
-                const total = context.chart._metasets[context.datasetIndex].total;
-                const percent = total ? ((value / total) * 100).toFixed(2) : '0.00';
-                return `${label}: ${value.toLocaleString()} (${percent}%)`;
+      const el = document.getElementById('directionChart');
+      const wrapper = el.closest('.chart-wrapper');
+      if ((topFreq + other) === 0) addNoDataOverlay(wrapper, 'No direction data');
+
+      new Chart(el, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data,
+            backgroundColor: [
+              'rgba(52, 211, 153, 0.85)',
+              'rgba(99, 102, 241, 0.7)'
+            ],
+            borderColor: [
+              'rgba(16, 185, 129, 1)',
+              'rgba(79, 70, 229, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const val = ctx.parsed;
+                  const pct = total ? ((val / total) * 100).toFixed(1) : 0;
+                  return ` ${val} (${pct}%)`;
+                }
               }
             }
           },
-          title: { display: false }
+          cutout: '58%'
         }
-      }
-    });
-    // View Toggle Logic
-    const toggleBtn = document.getElementById('viewToggle');
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('mobile-view');
-      const isMobile = document.body.classList.contains('mobile-view');
-      toggleBtn.textContent = isMobile ? "Switch to Desktop View" : "Switch to Mobile View";
+      });
+    })();
 
-      // Trigger Chart.js resize
-      Object.values(Chart.instances).forEach(chart => chart.resize());
-    });
+    // Security Type Mix (Doughnut: AssetBacked vs Other)
+    (function secTypeChartInit() {
+      const hs = context.summary_insights.holdings_summary;
+      const topName = hs?.SecurityTypeName?.top || 'AssetBacked';
+      const topFreq = hs?.SecurityTypeName?.freq || 0;
+      const total = hs?.SecurityTypeName?.count || 0;
+      const other = Math.max(total - topFreq, 0);
+
+      const el = document.getElementById('secTypeChart');
+      const wrapper = el.closest('.chart-wrapper');
+      if ((topFreq + other) === 0) addNoDataOverlay(wrapper, 'No security type data');
+
+      new Chart(el, {
+        type: 'doughnut',
+        data: {
+          labels: [topName, 'Other'],
+          datasets: [{
+            data: [topFreq, other],
+            backgroundColor: [
+              'rgba(250, 204, 21, 0.85)',
+              'rgba(248, 113, 113, 0.7)'
+            ],
+            borderColor: [
+              'rgba(234, 179, 8, 1)',
+              'rgba(239, 68, 68, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const val = ctx.parsed;
+                  const pct = total ? ((val / total) * 100).toFixed(1) : 0;
+                  return ` ${val} (${pct}%)`;
+                }
+              }
+            }
+          },
+          cutout: '58%'
+        }
+      });
+    })();
+
+    // Trades Timeline (Line) using provided chart_specs (empty dataset)
+    (function tradesChartInit() {
+      const specs = context.chart_specs.trades_chart;
+      const el = document.getElementById('tradesChart');
+      const wrapper = el.closest('.chart-wrapper');
+
+      const hasPoints = Array.isArray(specs.labels) && specs.labels.length > 0 &&
+                        Array.isArray(specs.datasets?.[0]?.data) && specs.datasets[0].data.length > 0;
+
+      if (!hasPoints) {
+        addNoDataOverlay(wrapper, 'No trades data available for Garfield');
+      }
+
+      new Chart(el, {
+        type: specs.type || 'line',
+        data: {
+          labels: specs.labels || [],
+          datasets: [{
+            label: specs.datasets?.[0]?.label || 'Quantity',
+            data: specs.datasets?.[0]?.data || [],
+            borderColor: specs.datasets?.[0]?.borderColor || 'rgba(255, 99, 132, 0.6)',
+            backgroundColor: 'rgba(255, 99, 132, 0.15)',
+            fill: false,
+            tension: 0.25,
+            pointRadius: 3,
+            pointHoverRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            x: {
+              grid: { display: false }
+            },
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    })();
   </script>
 </body>
-
 </html>
-```

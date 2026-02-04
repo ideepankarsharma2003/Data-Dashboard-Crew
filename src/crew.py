@@ -1,4 +1,4 @@
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import CodeInterpreterTool
 
 from config import agents, tasks    
@@ -17,7 +17,8 @@ formatter = Agent(
     role=agents["formatter"]["role"],
     goal=agents["formatter"]["goal"],
     backstory=agents["formatter"]["backstory"],
-    verbose=True
+    verbose=True,
+    llm=LLM(model="gpt-5")
 )
 
 analyze_task = Task(

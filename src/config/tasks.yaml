@@ -21,7 +21,7 @@ format_dashboard_task:
     Using the structured JSON output from the data analyst, generate a static
     HTML dashboard with embedded JavaScript charts (Chart.js).
 
-    The final output MUST be a complete HTML document.
+    The final output MUST be a complete HTML document with no markdown formatting.
     ## NOTE: the dashboard should be visually appealing and well-organized. the charts should be interactive and easy to understand.
     
     CRITICAL IMPLEMENTATION DETAILS:
