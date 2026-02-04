@@ -61,6 +61,9 @@ The crew consists of two main agents:
 4.  **View Output**:
     Once the process completes, open the generated **`dashboard.html`** file in your web browser to view the results.
 
+    <img width="600" alt="image" src="https://github.com/user-attachments/assets/759cc2e1-7b7e-467f-90a2-a209b05ac1cf" />
+
+
 ## 📂 Project Structure
 
 ```
